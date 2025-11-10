@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="261238ba-7c72-48fc-9939-3f090cee8342" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="munit-test-casesFlow" doc:id="e236285b-002a-48c1-847b-f608546b5207" >
+		<http:listener doc:name="Listener" doc:id="2db8e060-d7d6-41b9-86d3-29ddb8a234fd" config-ref="HTTP_Listener_config" path="test-case1"/>
+		<logger level="INFO" doc:name="START" doc:id="5701cb00-d048-4f38-8f9c-f70c64920f2b" message="Flow Started Successfully"/>
+		<ee:transform doc:name="Main Payload" doc:id="468eb132-8426-4b95-9ad2-6a4736645b52" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Welcome to mule " ++ (attributes.queryParams.firstname as String default "" ++ " " ++ attributes.queryParams.lastname as String default "")
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="END" doc:id="a7924b83-87a2-4108-a530-a2c0e2e2db8d" />
+	</flow>
+</mule>

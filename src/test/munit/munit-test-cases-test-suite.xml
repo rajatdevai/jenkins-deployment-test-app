@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-test-cases-test-suite.xml" />
+	<munit:test name="munit-test-cases-test-suite-munit-test-casesFlowTest" doc:id="11f63d10-aae9-49d8-b5b3-0195389b7be4" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="2903e0ea-25ef-4fc8-9589-1fb8e25bcac4" >
+				<munit:attributes value='#[{queryParams:{firstname: "Rajat",lastname: "singh"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit-test-casesFlow" doc:id="0f895705-d265-4487-a6ea-51352808879d" name="munit-test-casesFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="c043d221-edae-4f2e-84c6-db9726b77fec" message="#[payload]"/>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="8b900b95-9661-434e-9738-4c40d8b90f0d" actual="#[payload.message]" expected='#["Welcome to mule Rajat singh"]' message="Response is not the same "/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-test-cases-test-suiteTest" doc:id="d7c4cf30-93ca-48bf-8d0a-9785e005e2e5" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="2e9cab7a-58f4-4086-9662-816518a85eb0">
+				<munit:attributes value='#[{queryParams:{firstname: "Rajat",lastname: "singh"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit-test-casesFlow" doc:id="534468b9-49b3-4798-b475-309b64defd11" name="munit-test-casesFlow" />
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="80f31751-3028-4036-a8ff-d4173262f53a" message="#[payload]" />
+			<munit-tools:assert-that doc:name="Assert that" doc:id="16dc62c6-c669-4da6-825e-97a3d8c968fc" is='#[MunitTools::equalTo("Welcome to mule Rajat singh")]' expression="#[payload.message]" message="Response not validated"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="munit-test-cases-test-suiteTest1" doc:id="736243b6-0344-4fce-9299-9762cee35fee" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="96be8fbe-8d53-46c6-9731-b84a4eb617ad" >
+				<munit:attributes value='#[{queryParams:{firstname: "Rajat",lastname: "singh"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit-test-casesFlow" doc:id="7d237be3-7568-4ddf-8a70-78ff89332a45" name="munit-test-casesFlow" />
+		</munit:execution>
+		<munit:validation >
+			<logger level="INFO" doc:name="Logger" doc:id="db9d8b7c-0cef-4378-936a-ccb0dd83f738" message="#[payload]" />
+			<munit-tools:assert doc:name="Assert expression" doc:id="ef1c162b-1b14-4e1e-ae74-d6dea16b8300" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo({
+	"message" : "Welcome to mule Rajat singh"
+})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
