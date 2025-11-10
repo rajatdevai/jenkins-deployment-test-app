@@ -5,85 +5,59 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- PROJECT METADATA                                            -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
-
 	<groupId>com.mycompany</groupId>
 	<artifactId>munit-test-cases</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
 	<name>munit-test-cases</name>
-	<description>Multi-environment MuleSoft application with MUnit testing and CI/CD deployment</description>
-
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- PROPERTIES (Default values)                                 -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<!-- Mule & Plugin Versions -->
 		<app.runtime>4.9.8</app.runtime>
 		<mule.maven.plugin.version>4.3.0</mule.maven.plugin.version>
 		<munit.version>3.4.0</munit.version>
 
-		<!-- Default environment values (will be overridden by profiles) -->
+		<!-- Default values -->
 		<env.name>local</env.name>
 		<env.cloudHub.environment>Sandbox</env.cloudHub.environment>
 		<env.cloudHub.target>Cloudhub-US-East-2</env.cloudHub.target>
 		<env.cloudHub.replicas>1</env.cloudHub.replicas>
 		<env.cloudHub.vcores>0.1</env.cloudHub.vcores>
 		<env.cloudHub.java>17</env.cloudHub.java>
-		<env.properties.file>src/main/resources/properties/local.properties</env.properties.file>
 
-		<!-- App naming convention -->
+		<!-- App names -->
 		<app.name>${project.artifactId}</app.name>
 		<app.name.sandbox>${project.artifactId}-sandbox</app.name.sandbox>
 		<app.name.test>${project.artifactId}-test</app.name.test>
 		<app.name.prod>${project.artifactId}-prod</app.name.prod>
 	</properties>
 
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- BUILD CONFIGURATION                                         -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
-
 	<build>
 		<plugins>
-			<!-- Maven Clean Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.2.0</version>
 			</plugin>
 
-			<!-- Mule Maven Plugin (Main plugin for building & deployment) -->
+			<!-- Mule Maven Plugin -->
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-
 				<configuration>
-					<!-- CloudHub 2.0 Deployment Configuration -->
-					<!-- These values are populated by Maven profiles -->
 					<cloudhub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<provider>MC</provider>
-
-						<!-- Environment-specific values from profiles -->
 						<environment>${env.cloudHub.environment}</environment>
 						<target>${env.cloudHub.target}</target>
 						<muleVersion>${app.runtime}</muleVersion>
-
-						<!-- Application Configuration -->
 						<applicationName>${deployment.app.name}</applicationName>
 						<replicas>${env.cloudHub.replicas}</replicas>
 						<vCores>${env.cloudHub.vcores}</vCores>
-
-						<!-- Connected App Authentication -->
 						<connectedAppClientId>${env.connectedApp.id}</connectedAppClientId>
 						<connectedAppClientSecret>${env.connectedApp.secret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
@@ -91,19 +65,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Maven Resources Plugin (for filtering properties) -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<!-- Enable property filtering in resources -->
-					<filtering>true</filtering>
-				</configuration>
-			</plugin>
-
-			<!-- MUnit Maven Plugin (for unit testing and coverage) -->
+			<!-- MUnit Plugin -->
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
 				<artifactId>munit-maven-plugin</artifactId>
@@ -130,12 +92,7 @@
 		</plugins>
 	</build>
 
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- DEPENDENCIES                                                -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
-
 	<dependencies>
-		<!-- Mule HTTP Connector -->
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-http-connector</artifactId>
@@ -143,7 +100,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 
-		<!-- Mule Sockets Connector -->
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-sockets-connector</artifactId>
@@ -151,25 +107,22 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 
-		<!-- MUnit Runner (Test scope) -->
 		<dependency>
 			<groupId>com.mulesoft.munit</groupId>
 			<artifactId>munit-runner</artifactId>
-			<version>3.4.0</version>
+			<version>${munit.version}</version>
 			<classifier>mule-plugin</classifier>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- MUnit Tools (Test scope) -->
 		<dependency>
 			<groupId>com.mulesoft.munit</groupId>
 			<artifactId>munit-tools</artifactId>
-			<version>3.4.0</version>
+			<version>${munit.version}</version>
 			<classifier>mule-plugin</classifier>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- DataWeave Assertions (Test scope) -->
 		<dependency>
 			<groupId>org.mule.weave</groupId>
 			<artifactId>assertions</artifactId>
@@ -178,12 +131,7 @@
 		</dependency>
 	</dependencies>
 
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- REPOSITORIES                                                -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
-
 	<repositories>
-		<!-- Anypoint Exchange Repository -->
 		<repository>
 			<id>anypoint-exchange-v3</id>
 			<name>Anypoint Exchange</name>
@@ -191,7 +139,6 @@
 			<layout>default</layout>
 		</repository>
 
-		<!-- MuleSoft Releases Repository -->
 		<repository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
@@ -212,129 +159,60 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<!-- ═══════════════════════════════════════════════════════════ -->
-	<!-- MAVEN PROFILES (Environment-specific configurations)        -->
-	<!-- ═══════════════════════════════════════════════════════════ -->
-
+	<!-- MAVEN PROFILES -->
 	<profiles>
 
-		<!-- ═══════════════════════════════════════════════════════════ -->
-		<!-- PROFILE 1: SANDBOX ENVIRONMENT                              -->
-		<!-- Usage: mvn clean deploy -Pprofile-sandbox -DmuleDeploy      -->
-		<!-- ═══════════════════════════════════════════════════════════ -->
+		<!-- SANDBOX PROFILE -->
 		<profile>
 			<id>profile-sandbox</id>
-			<activation>
-				<property>
-					<name>maven.profile</name>
-					<value>sandbox</value>
-				</property>
-			</activation>
-
 			<properties>
-				<!-- Environment identifier -->
 				<env.name>sandbox</env.name>
-
-				<!-- CloudHub 2.0 Configuration -->
 				<env.cloudHub.environment>Sandbox</env.cloudHub.environment>
 				<env.cloudHub.target>Cloudhub-US-East-2</env.cloudHub.target>
 				<env.cloudHub.replicas>1</env.cloudHub.replicas>
 				<env.cloudHub.vcores>0.1</env.cloudHub.vcores>
 				<env.cloudHub.java>17</env.cloudHub.java>
-
-				<!-- Application Name -->
 				<deployment.app.name>${app.name.sandbox}</deployment.app.name>
-
-				<!-- Properties file location -->
-				<env.properties.file>src/main/resources/properties/sandbox.properties</env.properties.file>
-
-				<!-- Anypoint Connected App Credentials (from environment variables or Jenkins secrets) -->
 				<env.connectedApp.id>${CONNECTED_APP_ID}</env.connectedApp.id>
 				<env.connectedApp.secret>${CONNECTED_APP_SECRET}</env.connectedApp.secret>
-
-				<!-- Other Sandbox-specific properties -->
 				<env.api.timeout>5000</env.api.timeout>
 				<env.db.connection.pool>10</env.db.connection.pool>
 				<env.log.level>DEBUG</env.log.level>
 			</properties>
 		</profile>
 
-		<!-- ═══════════════════════════════════════════════════════════ -->
-		<!-- PROFILE 2: TEST ENVIRONMENT                                 -->
-		<!-- Usage: mvn clean deploy -Pprofile-test -DmuleDeploy         -->
-		<!-- ═══════════════════════════════════════════════════════════ -->
+		<!-- TEST PROFILE -->
 		<profile>
 			<id>profile-test</id>
-			<activation>
-				<property>
-					<name>maven.profile</name>
-					<value>test</value>
-				</property>
-			</activation>
-
 			<properties>
-				<!-- Environment identifier -->
 				<env.name>test</env.name>
-
-				<!-- CloudHub 2.0 Configuration -->
 				<env.cloudHub.environment>Test</env.cloudHub.environment>
 				<env.cloudHub.target>Cloudhub-US-East-2</env.cloudHub.target>
 				<env.cloudHub.replicas>1</env.cloudHub.replicas>
 				<env.cloudHub.vcores>0.2</env.cloudHub.vcores>
 				<env.cloudHub.java>17</env.cloudHub.java>
-
-				<!-- Application Name -->
 				<deployment.app.name>${app.name.test}</deployment.app.name>
-
-				<!-- Properties file location -->
-				<env.properties.file>src/main/resources/properties/test.properties</env.properties.file>
-
-				<!-- Anypoint Connected App Credentials -->
 				<env.connectedApp.id>${CONNECTED_APP_ID}</env.connectedApp.id>
 				<env.connectedApp.secret>${CONNECTED_APP_SECRET}</env.connectedApp.secret>
-
-				<!-- Test-specific properties -->
 				<env.api.timeout>10000</env.api.timeout>
 				<env.db.connection.pool>20</env.db.connection.pool>
 				<env.log.level>INFO</env.log.level>
 			</properties>
 		</profile>
 
-		<!-- ═══════════════════════════════════════════════════════════ -->
-		<!-- PROFILE 3: PRODUCTION ENVIRONMENT                           -->
-		<!-- Usage: mvn clean deploy -Pprofile-prod -DmuleDeploy         -->
-		<!-- ═══════════════════════════════════════════════════════════ -->
+		<!-- PRODUCTION PROFILE -->
 		<profile>
 			<id>profile-prod</id>
-			<activation>
-				<property>
-					<name>maven.profile</name>
-					<value>prod</value>
-				</property>
-			</activation>
-
 			<properties>
-				<!-- Environment identifier -->
 				<env.name>prod</env.name>
-
-				<!-- CloudHub 2.0 Configuration (Higher resources for production) -->
 				<env.cloudHub.environment>Production</env.cloudHub.environment>
 				<env.cloudHub.target>Cloudhub-US-East-2</env.cloudHub.target>
 				<env.cloudHub.replicas>2</env.cloudHub.replicas>
 				<env.cloudHub.vcores>1</env.cloudHub.vcores>
 				<env.cloudHub.java>17</env.cloudHub.java>
-
-				<!-- Application Name -->
 				<deployment.app.name>${app.name.prod}</deployment.app.name>
-
-				<!-- Properties file location -->
-				<env.properties.file>src/main/resources/properties/prod.properties</env.properties.file>
-
-				<!-- Anypoint Connected App Credentials -->
 				<env.connectedApp.id>${CONNECTED_APP_ID}</env.connectedApp.id>
 				<env.connectedApp.secret>${CONNECTED_APP_SECRET}</env.connectedApp.secret>
-
-				<!-- Production-specific properties (More conservative settings) -->
 				<env.api.timeout>15000</env.api.timeout>
 				<env.db.connection.pool>50</env.db.connection.pool>
 				<env.log.level>WARN</env.log.level>
