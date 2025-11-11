@@ -35,18 +35,17 @@
 	<munit:test name="munit-test-cases-test-suiteTest1" doc:id="736243b6-0344-4fce-9299-9762cee35fee" >
 		<munit:execution >
 			<munit:set-event doc:name="Set Event" doc:id="96be8fbe-8d53-46c6-9731-b84a4eb617ad" >
-				<munit:attributes value='#[{queryParams:{firstname: "Rajat",lastname: "singh"}}]' />
+				<munit:attributes value='#[readUrl("classpath://dwlFile/dwl_file_input_attributes.dwl")]' />
 			</munit:set-event>
 			<flow-ref doc:name="Flow-ref to munit-test-casesFlow" doc:id="7d237be3-7568-4ddf-8a70-78ff89332a45" name="munit-test-casesFlow" />
 		</munit:execution>
 		<munit:validation >
 			<logger level="INFO" doc:name="Logger" doc:id="db9d8b7c-0cef-4378-936a-ccb0dd83f738" message="#[payload]" />
-			<munit-tools:assert doc:name="Assert expression" doc:id="ef1c162b-1b14-4e1e-ae74-d6dea16b8300" >
-				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
- ---
-payload must equalTo({
-	"message" : "Welcome to mule Rajat singh"
-})]]]></munit-tools:that>
+			<munit-tools:assert doc:name="Assert expression" doc:id="ef1c162b-1b14-4e1e-ae74-d6dea16b8300" message="payload does not match ">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import dwlFile::dwl_file_response
+---
+dwl_file_response::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
